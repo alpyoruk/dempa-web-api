@@ -1,0 +1,1056 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CarSalesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="BoughtDate" Type="date" Nullable="false" />
+          <Property Name="BoughtPrice" Type="int" Nullable="false" />
+          <Property Name="SalePrice" Type="int" Nullable="false" />
+          <Property Name="PublishDate" Type="date" Nullable="false" />
+          <Property Name="SoldPrice" Type="int" />
+          <Property Name="SoldDate" Type="date" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+          <Property Name="isSold" Type="bit" Nullable="false" />
+          <Property Name="isPayed" Type="bit" Nullable="false" />
+          <Property Name="isRemoved" Type="bit" Nullable="false" />
+          <Property Name="PayedNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CarDetailPhotos">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CarID" Type="int" Nullable="false" />
+          <Property Name="PhotoLink" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="isMainPhoto" Type="bit" Nullable="false" />
+          <Property Name="PhotoName" Type="nvarchar(max)" />
+          <Property Name="PhotoKey" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="CarDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BrandID" Type="int" Nullable="false" />
+          <Property Name="SeriesID" Type="int" Nullable="false" />
+          <Property Name="ModelID" Type="int" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="FuelID" Type="int" Nullable="false" />
+          <Property Name="GearID" Type="int" Nullable="false" />
+          <Property Name="Kilometer" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CaseID" Type="int" Nullable="false" />
+          <Property Name="Power" Type="int" Nullable="false" />
+          <Property Name="Capacity" Type="int" Nullable="false" />
+          <Property Name="TractionID" Type="int" Nullable="false" />
+          <Property Name="Color" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PlateID" Type="int" Nullable="false" />
+          <Property Name="CarID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Case">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Fuel">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Gear">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Model">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ModelSeries">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SeriesID" Type="int" Nullable="false" />
+          <Property Name="ModelID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Plate">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Series">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SeriesBrand">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BrandID" Type="int" Nullable="false" />
+          <Property Name="SeriesID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Traction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Mail" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Car_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Car" Type="Self.Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Car">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetailPhotos_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="1" />
+          <End Role="CarDetailPhotos" Type="Self.CarDetailPhotos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetailPhotos">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Brand">
+          <End Role="Brand" Type="Self.Brand" Multiplicity="1" />
+          <End Role="CarDetails" Type="Self.CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="1" />
+          <End Role="CarDetails" Type="Self.CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Case">
+          <End Role="Case" Type="Self.Case" Multiplicity="1" />
+          <End Role="CarDetails" Type="Self.CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Case">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="CaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Fuel">
+          <End Role="Fuel" Type="Self.Fuel" Multiplicity="1" />
+          <End Role="CarDetails" Type="Self.CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fuel">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="FuelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Gear">
+          <End Role="Gear" Type="Self.Gear" Multiplicity="1" />
+          <End Role="CarDetails" Type="Self.CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gear">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="GearID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Model">
+          <End Role="Model" Type="Self.Model" Multiplicity="1" />
+          <End Role="CarDetails" Type="Self.CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Model">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="ModelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Plate">
+          <End Role="Plate" Type="Self.Plate" Multiplicity="1" />
+          <End Role="CarDetails" Type="Self.CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plate">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="PlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Series">
+          <End Role="Series" Type="Self.Series" Multiplicity="1" />
+          <End Role="CarDetails" Type="Self.CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="SeriesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Traction">
+          <End Role="Traction" Type="Self.Traction" Multiplicity="1" />
+          <End Role="CarDetails" Type="Self.CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Traction">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="TractionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelSeries_Model">
+          <End Role="Model" Type="Self.Model" Multiplicity="1" />
+          <End Role="ModelSeries" Type="Self.ModelSeries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Model">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ModelSeries">
+              <PropertyRef Name="ModelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelSeries_Series">
+          <End Role="Series" Type="Self.Series" Multiplicity="1" />
+          <End Role="ModelSeries" Type="Self.ModelSeries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ModelSeries">
+              <PropertyRef Name="SeriesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeriesBrand_Brand">
+          <End Role="Brand" Type="Self.Brand" Multiplicity="1" />
+          <End Role="SeriesBrand" Type="Self.SeriesBrand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SeriesBrand">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeriesBrand_Series">
+          <End Role="Series" Type="Self.Series" Multiplicity="1" />
+          <End Role="SeriesBrand" Type="Self.SeriesBrand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SeriesBrand">
+              <PropertyRef Name="SeriesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarSalesModelStoreContainer">
+          <EntitySet Name="Brand" EntityType="Self.Brand" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarDetailPhotos" EntityType="Self.CarDetailPhotos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarDetails" EntityType="Self.CarDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Case" EntityType="Self.Case" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Fuel" EntityType="Self.Fuel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Gear" EntityType="Self.Gear" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Model" EntityType="Self.Model" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ModelSeries" EntityType="Self.ModelSeries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Plate" EntityType="Self.Plate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Series" EntityType="Self.Series" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SeriesBrand" EntityType="Self.SeriesBrand" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Traction" EntityType="Self.Traction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Car_Users" Association="Self.FK_Car_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Car" EntitySet="Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetailPhotos_Car" Association="Self.FK_CarDetailPhotos_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarDetailPhotos" EntitySet="CarDetailPhotos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Brand" Association="Self.FK_CarDetails_Brand">
+            <End Role="Brand" EntitySet="Brand" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Car" Association="Self.FK_CarDetails_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Case" Association="Self.FK_CarDetails_Case">
+            <End Role="Case" EntitySet="Case" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Fuel" Association="Self.FK_CarDetails_Fuel">
+            <End Role="Fuel" EntitySet="Fuel" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Gear" Association="Self.FK_CarDetails_Gear">
+            <End Role="Gear" EntitySet="Gear" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Model" Association="Self.FK_CarDetails_Model">
+            <End Role="Model" EntitySet="Model" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Plate" Association="Self.FK_CarDetails_Plate">
+            <End Role="Plate" EntitySet="Plate" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Series" Association="Self.FK_CarDetails_Series">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Traction" Association="Self.FK_CarDetails_Traction">
+            <End Role="Traction" EntitySet="Traction" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelSeries_Model" Association="Self.FK_ModelSeries_Model">
+            <End Role="Model" EntitySet="Model" />
+            <End Role="ModelSeries" EntitySet="ModelSeries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelSeries_Series" Association="Self.FK_ModelSeries_Series">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="ModelSeries" EntitySet="ModelSeries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeriesBrand_Brand" Association="Self.FK_SeriesBrand_Brand">
+            <End Role="Brand" EntitySet="Brand" />
+            <End Role="SeriesBrand" EntitySet="SeriesBrand" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeriesBrand_Series" Association="Self.FK_SeriesBrand_Series">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="SeriesBrand" EntitySet="SeriesBrand" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CarSalesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="SeriesBrand" Relationship="Self.FK_SeriesBrand_Brand" FromRole="Brand" ToRole="SeriesBrand" />
+          <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Brand" FromRole="Brand" ToRole="CarDetails" />
+        </EntityType>
+        <EntityType Name="Case">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Case" FromRole="Case" ToRole="CarDetails" />
+        </EntityType>
+        <EntityType Name="Fuel">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Fuel" FromRole="Fuel" ToRole="CarDetails" />
+        </EntityType>
+        <EntityType Name="Gear">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Gear" FromRole="Gear" ToRole="CarDetails" />
+        </EntityType>
+        <EntityType Name="Model">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ModelSeries" Relationship="Self.FK_ModelSeries_Model" FromRole="Model" ToRole="ModelSeries" />
+          <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Model" FromRole="Model" ToRole="CarDetails" />
+        </EntityType>
+        <EntityType Name="ModelSeries">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SeriesID" Type="Int32" Nullable="false" />
+          <Property Name="ModelID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Model" Relationship="Self.FK_ModelSeries_Model" FromRole="ModelSeries" ToRole="Model" />
+          <NavigationProperty Name="Series" Relationship="Self.FK_ModelSeries_Series" FromRole="ModelSeries" ToRole="Series" />
+        </EntityType>
+        <EntityType Name="Plate">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Plate" FromRole="Plate" ToRole="CarDetails" />
+        </EntityType>
+        <EntityType Name="Series">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ModelSeries" Relationship="Self.FK_ModelSeries_Series" FromRole="Series" ToRole="ModelSeries" />
+          <NavigationProperty Name="SeriesBrand" Relationship="Self.FK_SeriesBrand_Series" FromRole="Series" ToRole="SeriesBrand" />
+          <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Series" FromRole="Series" ToRole="CarDetails" />
+        </EntityType>
+        <EntityType Name="SeriesBrand">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BrandID" Type="Int32" Nullable="false" />
+          <Property Name="SeriesID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Brand" Relationship="Self.FK_SeriesBrand_Brand" FromRole="SeriesBrand" ToRole="Brand" />
+          <NavigationProperty Name="Series" Relationship="Self.FK_SeriesBrand_Series" FromRole="SeriesBrand" ToRole="Series" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Traction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Traction" FromRole="Traction" ToRole="CarDetails" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Mail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Car" Relationship="CarSalesModel.FK_Car_Users" FromRole="Users" ToRole="Car" />
+        </EntityType>
+        <Association Name="FK_SeriesBrand_Brand">
+          <End Role="Brand" Type="Self.Brand" Multiplicity="1" />
+          <End Role="SeriesBrand" Type="Self.SeriesBrand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SeriesBrand">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelSeries_Model">
+          <End Role="Model" Type="Self.Model" Multiplicity="1" />
+          <End Role="ModelSeries" Type="Self.ModelSeries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Model">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ModelSeries">
+              <PropertyRef Name="ModelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelSeries_Series">
+          <End Role="Series" Type="Self.Series" Multiplicity="1" />
+          <End Role="ModelSeries" Type="Self.ModelSeries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ModelSeries">
+              <PropertyRef Name="SeriesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeriesBrand_Series">
+          <End Role="Series" Type="Self.Series" Multiplicity="1" />
+          <End Role="SeriesBrand" Type="Self.SeriesBrand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SeriesBrand">
+              <PropertyRef Name="SeriesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarSalesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Brand" EntityType="Self.Brand" />
+          <EntitySet Name="Case" EntityType="Self.Case" />
+          <EntitySet Name="Fuel" EntityType="Self.Fuel" />
+          <EntitySet Name="Gear" EntityType="Self.Gear" />
+          <EntitySet Name="Model" EntityType="Self.Model" />
+          <EntitySet Name="ModelSeries" EntityType="Self.ModelSeries" />
+          <EntitySet Name="Plate" EntityType="Self.Plate" />
+          <EntitySet Name="Series" EntityType="Self.Series" />
+          <EntitySet Name="SeriesBrand" EntityType="Self.SeriesBrand" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Traction" EntityType="Self.Traction" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_SeriesBrand_Brand" Association="Self.FK_SeriesBrand_Brand">
+            <End Role="Brand" EntitySet="Brand" />
+            <End Role="SeriesBrand" EntitySet="SeriesBrand" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelSeries_Model" Association="Self.FK_ModelSeries_Model">
+            <End Role="Model" EntitySet="Model" />
+            <End Role="ModelSeries" EntitySet="ModelSeries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelSeries_Series" Association="Self.FK_ModelSeries_Series">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="ModelSeries" EntitySet="ModelSeries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeriesBrand_Series" Association="Self.FK_SeriesBrand_Series">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="SeriesBrand" EntitySet="SeriesBrand" />
+          </AssociationSet>
+          <EntitySet Name="Car" EntityType="CarSalesModel.Car" />
+          <AssociationSet Name="FK_Car_Users" Association="CarSalesModel.FK_Car_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Car" EntitySet="Car" />
+          </AssociationSet>
+          <EntitySet Name="CarDetails" EntityType="CarSalesModel.CarDetails" />
+          <AssociationSet Name="FK_CarDetails_Brand" Association="CarSalesModel.FK_CarDetails_Brand">
+            <End Role="Brand" EntitySet="Brand" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Car" Association="CarSalesModel.FK_CarDetails_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Case" Association="CarSalesModel.FK_CarDetails_Case">
+            <End Role="Case" EntitySet="Case" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Fuel" Association="CarSalesModel.FK_CarDetails_Fuel">
+            <End Role="Fuel" EntitySet="Fuel" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Gear" Association="CarSalesModel.FK_CarDetails_Gear">
+            <End Role="Gear" EntitySet="Gear" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Model" Association="CarSalesModel.FK_CarDetails_Model">
+            <End Role="Model" EntitySet="Model" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Plate" Association="CarSalesModel.FK_CarDetails_Plate">
+            <End Role="Plate" EntitySet="Plate" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Series" Association="CarSalesModel.FK_CarDetails_Series">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarDetails_Traction" Association="CarSalesModel.FK_CarDetails_Traction">
+            <End Role="Traction" EntitySet="Traction" />
+            <End Role="CarDetails" EntitySet="CarDetails" />
+          </AssociationSet>
+          <EntitySet Name="CarDetailPhotos" EntityType="CarSalesModel.CarDetailPhotos" />
+          <AssociationSet Name="FK_CarDetailPhotos_Car" Association="CarSalesModel.FK_CarDetailPhotos_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarDetailPhotos" EntitySet="CarDetailPhotos" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BoughtDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="BoughtPrice" Type="Int32" Nullable="false" />
+          <Property Name="SalePrice" Type="Int32" Nullable="false" />
+          <Property Name="PublishDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="SoldPrice" Type="Int32" />
+          <Property Name="SoldDate" Type="DateTime" Precision="0" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="isSold" Type="Boolean" Nullable="false" />
+          <Property Name="isPayed" Type="Boolean" Nullable="false" />
+          <Property Name="PayedNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="CarSalesModel.FK_Car_Users" FromRole="Car" ToRole="Users" />
+          <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Car" FromRole="Car" ToRole="CarDetails" />
+          <NavigationProperty Name="CarDetailPhotos" Relationship="CarSalesModel.FK_CarDetailPhotos_Car" FromRole="Car" ToRole="CarDetailPhotos" />
+          <Property Name="isRemoved" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Car_Users">
+          <End Type="CarSalesModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="CarSalesModel.Car" Role="Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Car">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CarDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BrandID" Type="Int32" Nullable="false" />
+          <Property Name="SeriesID" Type="Int32" Nullable="false" />
+          <Property Name="ModelID" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="FuelID" Type="Int32" Nullable="false" />
+          <Property Name="GearID" Type="Int32" Nullable="false" />
+          <Property Name="Kilometer" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CaseID" Type="Int32" Nullable="false" />
+          <Property Name="Power" Type="Int32" Nullable="false" />
+          <Property Name="Capacity" Type="Int32" Nullable="false" />
+          <Property Name="TractionID" Type="Int32" Nullable="false" />
+          <Property Name="Color" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlateID" Type="Int32" Nullable="false" />
+          <Property Name="CarID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Brand" Relationship="CarSalesModel.FK_CarDetails_Brand" FromRole="CarDetails" ToRole="Brand" />
+          <NavigationProperty Name="Car" Relationship="CarSalesModel.FK_CarDetails_Car" FromRole="CarDetails" ToRole="Car" />
+          <NavigationProperty Name="Case" Relationship="CarSalesModel.FK_CarDetails_Case" FromRole="CarDetails" ToRole="Case" />
+          <NavigationProperty Name="Fuel" Relationship="CarSalesModel.FK_CarDetails_Fuel" FromRole="CarDetails" ToRole="Fuel" />
+          <NavigationProperty Name="Gear" Relationship="CarSalesModel.FK_CarDetails_Gear" FromRole="CarDetails" ToRole="Gear" />
+          <NavigationProperty Name="Model" Relationship="CarSalesModel.FK_CarDetails_Model" FromRole="CarDetails" ToRole="Model" />
+          <NavigationProperty Name="Plate" Relationship="CarSalesModel.FK_CarDetails_Plate" FromRole="CarDetails" ToRole="Plate" />
+          <NavigationProperty Name="Series" Relationship="CarSalesModel.FK_CarDetails_Series" FromRole="CarDetails" ToRole="Series" />
+          <NavigationProperty Name="Traction" Relationship="CarSalesModel.FK_CarDetails_Traction" FromRole="CarDetails" ToRole="Traction" />
+        </EntityType>
+        <Association Name="FK_CarDetails_Brand">
+          <End Type="CarSalesModel.Brand" Role="Brand" Multiplicity="1" />
+          <End Type="CarSalesModel.CarDetails" Role="CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Car">
+          <End Type="CarSalesModel.Car" Role="Car" Multiplicity="1" />
+          <End Type="CarSalesModel.CarDetails" Role="CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Case">
+          <End Type="CarSalesModel.Case" Role="Case" Multiplicity="1" />
+          <End Type="CarSalesModel.CarDetails" Role="CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Case">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="CaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Fuel">
+          <End Type="CarSalesModel.Fuel" Role="Fuel" Multiplicity="1" />
+          <End Type="CarSalesModel.CarDetails" Role="CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fuel">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="FuelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Gear">
+          <End Type="CarSalesModel.Gear" Role="Gear" Multiplicity="1" />
+          <End Type="CarSalesModel.CarDetails" Role="CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gear">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="GearID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Model">
+          <End Type="CarSalesModel.Model" Role="Model" Multiplicity="1" />
+          <End Type="CarSalesModel.CarDetails" Role="CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Model">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="ModelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Plate">
+          <End Type="CarSalesModel.Plate" Role="Plate" Multiplicity="1" />
+          <End Type="CarSalesModel.CarDetails" Role="CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plate">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="PlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Series">
+          <End Type="CarSalesModel.Series" Role="Series" Multiplicity="1" />
+          <End Type="CarSalesModel.CarDetails" Role="CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="SeriesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarDetails_Traction">
+          <End Type="CarSalesModel.Traction" Role="Traction" Multiplicity="1" />
+          <End Type="CarSalesModel.CarDetails" Role="CarDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Traction">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetails">
+              <PropertyRef Name="TractionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CarDetailPhotos">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CarID" Type="Int32" Nullable="false" />
+          <Property Name="PhotoLink" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="isMainPhoto" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Car" Relationship="CarSalesModel.FK_CarDetailPhotos_Car" FromRole="CarDetailPhotos" ToRole="Car" />
+          <Property Name="PhotoName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhotoKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_CarDetailPhotos_Car">
+          <End Type="CarSalesModel.Car" Role="Car" Multiplicity="1" />
+          <End Type="CarSalesModel.CarDetailPhotos" Role="CarDetailPhotos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarDetailPhotos">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CarSalesModelStoreContainer" CdmEntityContainer="CarSalesEntities">
+          <EntitySetMapping Name="Brand">
+            <EntityTypeMapping TypeName="CarSalesModel.Brand">
+              <MappingFragment StoreEntitySet="Brand">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Case">
+            <EntityTypeMapping TypeName="CarSalesModel.Case">
+              <MappingFragment StoreEntitySet="Case">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Fuel">
+            <EntityTypeMapping TypeName="CarSalesModel.Fuel">
+              <MappingFragment StoreEntitySet="Fuel">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Gear">
+            <EntityTypeMapping TypeName="CarSalesModel.Gear">
+              <MappingFragment StoreEntitySet="Gear">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Model">
+            <EntityTypeMapping TypeName="CarSalesModel.Model">
+              <MappingFragment StoreEntitySet="Model">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ModelSeries">
+            <EntityTypeMapping TypeName="CarSalesModel.ModelSeries">
+              <MappingFragment StoreEntitySet="ModelSeries">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SeriesID" ColumnName="SeriesID" />
+                <ScalarProperty Name="ModelID" ColumnName="ModelID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Plate">
+            <EntityTypeMapping TypeName="CarSalesModel.Plate">
+              <MappingFragment StoreEntitySet="Plate">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Series">
+            <EntityTypeMapping TypeName="CarSalesModel.Series">
+              <MappingFragment StoreEntitySet="Series">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SeriesBrand">
+            <EntityTypeMapping TypeName="CarSalesModel.SeriesBrand">
+              <MappingFragment StoreEntitySet="SeriesBrand">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="SeriesID" ColumnName="SeriesID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="CarSalesModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Traction">
+            <EntityTypeMapping TypeName="CarSalesModel.Traction">
+              <MappingFragment StoreEntitySet="Traction">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="CarSalesModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Car">
+            <EntityTypeMapping TypeName="CarSalesModel.Car">
+              <MappingFragment StoreEntitySet="Car">
+                <ScalarProperty Name="isRemoved" ColumnName="isRemoved" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PayedNumber" ColumnName="PayedNumber" />
+                <ScalarProperty Name="isPayed" ColumnName="isPayed" />
+                <ScalarProperty Name="isSold" ColumnName="isSold" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="SoldDate" ColumnName="SoldDate" />
+                <ScalarProperty Name="SoldPrice" ColumnName="SoldPrice" />
+                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
+                <ScalarProperty Name="BoughtPrice" ColumnName="BoughtPrice" />
+                <ScalarProperty Name="BoughtDate" ColumnName="BoughtDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CarDetails">
+            <EntityTypeMapping TypeName="CarSalesModel.CarDetails">
+              <MappingFragment StoreEntitySet="CarDetails">
+                <ScalarProperty Name="CarID" ColumnName="CarID" />
+                <ScalarProperty Name="PlateID" ColumnName="PlateID" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="TractionID" ColumnName="TractionID" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+                <ScalarProperty Name="Power" ColumnName="Power" />
+                <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+                <ScalarProperty Name="Kilometer" ColumnName="Kilometer" />
+                <ScalarProperty Name="GearID" ColumnName="GearID" />
+                <ScalarProperty Name="FuelID" ColumnName="FuelID" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="ModelID" ColumnName="ModelID" />
+                <ScalarProperty Name="SeriesID" ColumnName="SeriesID" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CarDetailPhotos">
+            <EntityTypeMapping TypeName="CarSalesModel.CarDetailPhotos">
+              <MappingFragment StoreEntitySet="CarDetailPhotos">
+                <ScalarProperty Name="PhotoKey" ColumnName="PhotoKey" />
+                <ScalarProperty Name="PhotoName" ColumnName="PhotoName" />
+                <ScalarProperty Name="isMainPhoto" ColumnName="isMainPhoto" />
+                <ScalarProperty Name="PhotoLink" ColumnName="PhotoLink" />
+                <ScalarProperty Name="CarID" ColumnName="CarID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

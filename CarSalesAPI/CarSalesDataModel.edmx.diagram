@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="57589f61fefc47ab9c557a92042441c9" Name="Diagram1">
+        <EntityTypeShape EntityType="CarSalesModel.Brand" Width="1.5" PointX="3.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.Case" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.Fuel" Width="1.5" PointX="0.75" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.Gear" Width="1.5" PointX="0.75" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.Model" Width="1.5" PointX="0.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.ModelSeries" Width="1.5" PointX="6" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.Plate" Width="1.5" PointX="0.75" PointY="21.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.Series" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.SeriesBrand" Width="1.5" PointX="6" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.Traction" Width="1.5" PointX="0.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSalesModel.Users" Width="1.5" PointX="0.75" PointY="26.25" IsExpanded="true" />
+        <AssociationConnector Association="CarSalesModel.FK_SeriesBrand_Brand" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSalesModel.FK_ModelSeries_Model" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSalesModel.FK_ModelSeries_Series" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSalesModel.FK_SeriesBrand_Series" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CarSalesModel.Car" Width="1.5" PointX="3" PointY="25.25" />
+        <AssociationConnector Association="CarSalesModel.FK_Car_Users" />
+        <EntityTypeShape EntityType="CarSalesModel.CarDetails" Width="1.5" PointX="10" PointY="12.5" />
+        <AssociationConnector Association="CarSalesModel.FK_CarDetails_Brand" />
+        <AssociationConnector Association="CarSalesModel.FK_CarDetails_Car" />
+        <AssociationConnector Association="CarSalesModel.FK_CarDetails_Case" />
+        <AssociationConnector Association="CarSalesModel.FK_CarDetails_Fuel" />
+        <AssociationConnector Association="CarSalesModel.FK_CarDetails_Gear" />
+        <AssociationConnector Association="CarSalesModel.FK_CarDetails_Model" />
+        <AssociationConnector Association="CarSalesModel.FK_CarDetails_Plate" />
+        <AssociationConnector Association="CarSalesModel.FK_CarDetails_Series" />
+        <AssociationConnector Association="CarSalesModel.FK_CarDetails_Traction" />
+        <EntityTypeShape EntityType="CarSalesModel.CarDetailPhotos" Width="1.5" PointX="5.25" PointY="26.375" />
+        <AssociationConnector Association="CarSalesModel.FK_CarDetailPhotos_Car" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
