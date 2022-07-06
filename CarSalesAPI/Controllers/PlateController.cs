@@ -2,24 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using CarSalesAPI.Models;
 
 namespace CarSalesAPI.Controllers
 {
     public class PlateController : ApiController
     {
-        private static PlateController _instance;
-
-        public static PlateController GetInstance()
-        {
-            if (_instance == null)
-            {
-                _instance = new PlateController();
-            }
-
-            return _instance;
-        }
-
         [HttpGet, Route("api/Plate/GetPlates")]
         public GetPlatesResponse GetPlates()
         {

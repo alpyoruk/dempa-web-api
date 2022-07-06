@@ -11,11 +11,10 @@ namespace CarSalesAPI.App_Start
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            var cors = new EnableCorsAttribute("*", "*", "*");
-            config.EnableCors(cors);
+            //var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors();
             // Web API routes
             config.MapHttpAttributeRoutes();
-
             config.Routes.MapHttpRoute(
                 name: "RecycleApi",
                 routeTemplate: "api/{controller}/{id}",

@@ -2,24 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using CarSalesAPI.Models;
 
 namespace CarSalesAPI.Controllers
 {
     public class ModelController : ApiController
     {
-        private static ModelController _instance;
-
-        public static ModelController GetInstance()
-        {
-            if (_instance == null)
-            {
-                _instance = new ModelController();
-            }
-
-            return _instance;
-        }
-
         [HttpPost, Route("api/Model/GetModels")]
         public GetModelsResponse GetModels(GetBrandIdOrSeriesId input)
         {

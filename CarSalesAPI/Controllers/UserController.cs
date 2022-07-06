@@ -6,23 +6,12 @@ using CarSalesAPI.Models;
 using CarSalesAPI.Converters;
 using System.Net.Mail;
 using System.Net;
+using System.Web.Http.Cors;
 
 namespace CarSalesAPI.Controllers
 {
     public class UserController : ApiController
     {
-        private static UserController _instance;
-
-        public static UserController GetInstance()
-        {
-            if (_instance == null)
-            {
-                _instance = new UserController();
-            }
-
-            return _instance;
-        }
-
         [HttpPost, Route("api/User/Login")]
         public GetUserResponse Login(UserModel input)
         {

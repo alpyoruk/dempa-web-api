@@ -2,24 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using CarSalesAPI.Models;
 
 namespace CarSalesAPI.Controllers
 {
     public class TractionController : ApiController
     {
-        private static TractionController _instance;
-
-        public static TractionController GetInstance()
-        {
-            if (_instance == null)
-            {
-                _instance = new TractionController();
-            }
-
-            return _instance;
-        }
-
         [HttpGet, Route("api/Traction/GetTractions")]
         public GetTractionsResponse GetTractions()
         {

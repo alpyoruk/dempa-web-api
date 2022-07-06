@@ -2,24 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using CarSalesAPI.Models;
 
 namespace CarSalesAPI.Controllers
 {
     public class CaseController : ApiController
     {
-        private static CaseController _instance;
-
-        public static CaseController GetInstance()
-        {
-            if (_instance == null)
-            {
-                _instance = new CaseController();
-            }
-
-            return _instance;
-        }
-
         [HttpGet, Route("api/Case/GetCases")]
         public GetCasesResponse GetCases()
         {
