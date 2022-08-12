@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using CarSalesAPI.Models;
 
 namespace CarSalesAPI.Controllers
@@ -10,7 +11,7 @@ namespace CarSalesAPI.Controllers
     public class ModelController : ApiController
     {
         [HttpPost, Route("api/Model/GetModels")]
-        public GetModelsResponse GetModels(GetBrandIdOrSeriesId input)
+        public async Task<GetModelsResponse> GetModels(GetBrandIdOrSeriesId input)
         {
             try
             {
@@ -21,7 +22,7 @@ namespace CarSalesAPI.Controllers
                         GetModels = new List<ModelModel>()
                     };
 
-                    var modelSeriesData = context.ModelSeries.Where(x => x.SeriesID == input.SeriesID);
+                    var modelSeriesData = await context.ModelSeries.Where(x => x.SeriesID == input.SeriesID).ToListAsync();
 
                     foreach (var item in modelSeriesData)
                     {
@@ -60,7 +61,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Model/AddOrEditModel")]
-        public GetLastAddedResponse AddOrEditModel(AddOrEditModelRequest input)
+        public async Task<GetLastAddedResponse> AddOrEditModel(AddOrEditModelRequest input)
         {
             try
             {
@@ -84,13 +85,13 @@ namespace CarSalesAPI.Controllers
                         };
 
                         context.ModelSeries.Add(modelSeriesData);
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                         res.ID = dataRes.ID;
                         res.Name = dataRes.Name;
                     }
                     else
                     {
-                        var data = context.Model.Single(x => x.ID == input.ID);
+                        var data = await context.Model.SingleOrDefaultAsync(x => x.ID == input.ID);
 
                         if (input.isEdit)
                         {
@@ -101,7 +102,7 @@ namespace CarSalesAPI.Controllers
                             data.isDeleted = true;
                         }
 
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
 
                     res.Success = true;

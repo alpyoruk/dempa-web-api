@@ -16,13 +16,11 @@
         <EntityTypeShape EntityType="CarSalesModel.SeriesBrand" Width="1.5" PointX="6" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CarSalesModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CarSalesModel.Traction" Width="1.5" PointX="0.75" PointY="23.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CarSalesModel.Users" Width="1.5" PointX="0.75" PointY="26.25" IsExpanded="true" />
         <AssociationConnector Association="CarSalesModel.FK_SeriesBrand_Brand" ManuallyRouted="false" />
         <AssociationConnector Association="CarSalesModel.FK_ModelSeries_Model" ManuallyRouted="false" />
         <AssociationConnector Association="CarSalesModel.FK_ModelSeries_Series" ManuallyRouted="false" />
         <AssociationConnector Association="CarSalesModel.FK_SeriesBrand_Series" ManuallyRouted="false" />
         <EntityTypeShape EntityType="CarSalesModel.Car" Width="1.5" PointX="3" PointY="25.25" />
-        <AssociationConnector Association="CarSalesModel.FK_Car_Users" />
         <EntityTypeShape EntityType="CarSalesModel.CarDetails" Width="1.5" PointX="10" PointY="12.5" />
         <AssociationConnector Association="CarSalesModel.FK_CarDetails_Brand" />
         <AssociationConnector Association="CarSalesModel.FK_CarDetails_Car" />
@@ -35,6 +33,8 @@
         <AssociationConnector Association="CarSalesModel.FK_CarDetails_Traction" />
         <EntityTypeShape EntityType="CarSalesModel.CarDetailPhotos" Width="1.5" PointX="5.25" PointY="26.375" />
         <AssociationConnector Association="CarSalesModel.FK_CarDetailPhotos_Car" />
+        <EntityTypeShape EntityType="CarSalesModel.Users" Width="1.5" PointX="0.75" PointY="26.25" />
+        <AssociationConnector Association="CarSalesModel.FK_Car_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

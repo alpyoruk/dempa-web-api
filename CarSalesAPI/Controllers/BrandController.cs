@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using CarSalesAPI.Models;
 
 namespace CarSalesAPI.Controllers
@@ -10,7 +11,7 @@ namespace CarSalesAPI.Controllers
     public class BrandController : ApiController
     {
         [HttpGet, Route("api/Brand/GetBrands")]
-        public GetBrandsResponse GetBrands()
+        public async Task<GetBrandsResponse> GetBrands()
         {
             try
             {
@@ -21,7 +22,7 @@ namespace CarSalesAPI.Controllers
                         GetBrands = new List<BrandModel>()
                     };
 
-                    var data = context.Brand.Where(x => x.isDeleted == false);
+                    var data = await context.Brand.Where(x => x.isDeleted == false).ToListAsync();
 
                     foreach (var item in data)
                     {
@@ -55,7 +56,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Brand/AddOrEditBrand")]
-        public GetLastAddedResponse AddOrEditBrand(AddOrEditRequest input)
+        public async Task<GetLastAddedResponse> AddOrEditBrand(AddOrEditRequest input)
         {
             try
             {
@@ -71,14 +72,14 @@ namespace CarSalesAPI.Controllers
                         };
 
                         var dataRes = context.Brand.Add(data);
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
 
                         res.ID = dataRes.ID;
                         res.Name = dataRes.Name;
                     }
                     else
                     {
-                        var data = context.Brand.Single(x => x.ID == input.ID);
+                        var data = await context.Brand.SingleOrDefaultAsync(x => x.ID == input.ID);
 
                         if (input.isEdit)
                         {
@@ -89,7 +90,7 @@ namespace CarSalesAPI.Controllers
                             data.isDeleted = true;
                         }
 
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
 
                     res.Success = true;

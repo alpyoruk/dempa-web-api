@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using CarSalesAPI.Models;
 
 namespace CarSalesAPI.Controllers
@@ -10,7 +11,7 @@ namespace CarSalesAPI.Controllers
     public class CaseController : ApiController
     {
         [HttpGet, Route("api/Case/GetCases")]
-        public GetCasesResponse GetCases()
+        public async Task<GetCasesResponse> GetCases()
         {
             try
             {
@@ -21,7 +22,7 @@ namespace CarSalesAPI.Controllers
                         GetCases = new List<CaseModel>()
                     };
 
-                    var data = context.Case.Where(x => x.isDeleted == false);
+                    var data = await context.Case.Where(x => x.isDeleted == false).ToListAsync();
 
                     foreach (var item in data)
                     {
@@ -56,7 +57,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Case/AddOrEditCase")]
-        public GetLastAddedResponse AddOrEditCase(AddOrEditRequest input)
+        public async Task<GetLastAddedResponse> AddOrEditCase(AddOrEditRequest input)
         {
             try
             {
@@ -72,13 +73,13 @@ namespace CarSalesAPI.Controllers
                         };
 
                         var dataRes = context.Case.Add(data);
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                         res.ID = dataRes.ID;
                         res.Name = dataRes.Name;
                     }
                     else
                     {
-                        var data = context.Case.Single(x => x.ID == input.ID);
+                        var data = await context.Case.SingleOrDefaultAsync(x => x.ID == input.ID);
 
                         if (input.isEdit)
                         {
@@ -89,7 +90,7 @@ namespace CarSalesAPI.Controllers
                             data.isDeleted = true;
                         }
 
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
 
                     res.Success = true;

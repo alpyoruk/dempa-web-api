@@ -154,7 +154,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Mail" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Password" Type="binary" MaxLength="32" Nullable="false" />
           <Property Name="isDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Car_Users">
@@ -524,18 +524,6 @@
           <Property Name="isDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Traction" FromRole="Traction" ToRole="CarDetails" />
         </EntityType>
-        <EntityType Name="Users">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Mail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Car" Relationship="CarSalesModel.FK_Car_Users" FromRole="Users" ToRole="Car" />
-        </EntityType>
         <Association Name="FK_SeriesBrand_Brand">
           <End Role="Brand" Type="Self.Brand" Multiplicity="1" />
           <End Role="SeriesBrand" Type="Self.SeriesBrand" Multiplicity="*" />
@@ -596,7 +584,6 @@
           <EntitySet Name="SeriesBrand" EntityType="Self.SeriesBrand" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Traction" EntityType="Self.Traction" />
-          <EntitySet Name="Users" EntityType="Self.Users" />
           <AssociationSet Name="FK_SeriesBrand_Brand" Association="Self.FK_SeriesBrand_Brand">
             <End Role="Brand" EntitySet="Brand" />
             <End Role="SeriesBrand" EntitySet="SeriesBrand" />
@@ -614,10 +601,6 @@
             <End Role="SeriesBrand" EntitySet="SeriesBrand" />
           </AssociationSet>
           <EntitySet Name="Car" EntityType="CarSalesModel.Car" />
-          <AssociationSet Name="FK_Car_Users" Association="CarSalesModel.FK_Car_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Car" EntitySet="Car" />
-          </AssociationSet>
           <EntitySet Name="CarDetails" EntityType="CarSalesModel.CarDetails" />
           <AssociationSet Name="FK_CarDetails_Brand" Association="CarSalesModel.FK_CarDetails_Brand">
             <End Role="Brand" EntitySet="Brand" />
@@ -660,6 +643,11 @@
             <End Role="Car" EntitySet="Car" />
             <End Role="CarDetailPhotos" EntitySet="CarDetailPhotos" />
           </AssociationSet>
+          <EntitySet Name="Users" EntityType="CarSalesModel.Users" />
+          <AssociationSet Name="FK_Car_Users" Association="CarSalesModel.FK_Car_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Car" EntitySet="Car" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Car">
           <Key>
@@ -679,23 +667,11 @@
           <Property Name="isPayed" Type="Boolean" Nullable="false" />
           <Property Name="PayedNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Users" Relationship="CarSalesModel.FK_Car_Users" FromRole="Car" ToRole="Users" />
           <NavigationProperty Name="CarDetails" Relationship="CarSalesModel.FK_CarDetails_Car" FromRole="Car" ToRole="CarDetails" />
           <NavigationProperty Name="CarDetailPhotos" Relationship="CarSalesModel.FK_CarDetailPhotos_Car" FromRole="Car" ToRole="CarDetailPhotos" />
           <Property Name="isRemoved" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="CarSalesModel.FK_Car_Users" FromRole="Car" ToRole="Users" />
         </EntityType>
-        <Association Name="FK_Car_Users">
-          <End Type="CarSalesModel.Users" Role="Users" Multiplicity="1" />
-          <End Type="CarSalesModel.Car" Role="Car" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Car">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="CarDetails">
           <Key>
             <PropertyRef Name="ID" />
@@ -857,6 +833,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mail" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="Binary" Nullable="false" MaxLength="32" FixedLength="true" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Car" Relationship="CarSalesModel.FK_Car_Users" FromRole="Users" ToRole="Car" />
+        </EntityType>
+        <Association Name="FK_Car_Users">
+          <End Type="CarSalesModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="CarSalesModel.Car" Role="Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Car">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -964,18 +964,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="CarSalesModel.Users">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="Mail" ColumnName="Mail" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Car">
             <EntityTypeMapping TypeName="CarSalesModel.Car">
               <MappingFragment StoreEntitySet="Car">
@@ -1026,6 +1014,18 @@
                 <ScalarProperty Name="isMainPhoto" ColumnName="isMainPhoto" />
                 <ScalarProperty Name="PhotoLink" ColumnName="PhotoLink" />
                 <ScalarProperty Name="CarID" ColumnName="CarID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="CarSalesModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

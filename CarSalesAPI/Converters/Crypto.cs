@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Security;
@@ -9,50 +10,23 @@ namespace CarSalesAPI.Converters
 {
     public class Crypto
     {
-        private static readonly UTF8Encoding Encoder = new UTF8Encoding();
-
-        public static string Encrypt(string unencrypted)
+        public static byte[] Encrypt(string unencrypted)
         {
             if (string.IsNullOrEmpty(unencrypted))
-                return string.Empty;
+                return null;
 
             try
             {
-                var encryptedBytes = MachineKey.Protect(Encoder.GetBytes(unencrypted));
-
-                if (encryptedBytes != null && encryptedBytes.Length > 0)
-                    return HttpServerUtility.UrlTokenEncode(encryptedBytes);
+                SHA256 sha256 = SHA256Managed.Create();
+                byte[] hashValue;
+                UTF8Encoding objUtf8 = new UTF8Encoding();
+                hashValue = sha256.ComputeHash(objUtf8.GetBytes(unencrypted));
+                return hashValue;
             }
             catch (Exception)
             {
-                return string.Empty;
+                return null;
             }
-
-            return string.Empty;
-        }
-
-        public static string Decrypt(string encrypted)
-        {
-            if (string.IsNullOrEmpty(encrypted))
-                return string.Empty;
-
-            try
-            {
-                var bytes = HttpServerUtility.UrlTokenDecode(encrypted);
-                if (bytes != null && bytes.Length > 0)
-                {
-                    var decryptedBytes = MachineKey.Unprotect(bytes);
-                    if (decryptedBytes != null && decryptedBytes.Length > 0)
-                        return Encoder.GetString(decryptedBytes);
-                }
-
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-
-            return string.Empty;
         }
     }
 }

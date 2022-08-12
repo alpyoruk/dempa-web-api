@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using CarSalesAPI.Models;
 
 namespace CarSalesAPI.Controllers
@@ -10,7 +11,7 @@ namespace CarSalesAPI.Controllers
     public class SeriesController : ApiController
     {
         [HttpPost, Route("api/Series/GetSeries")]
-        public GetSeriesResponse GetSeries(GetBrandIdOrSeriesId input)
+        public async Task<GetSeriesResponse> GetSeries(GetBrandIdOrSeriesId input)
         {
             try
             {
@@ -21,11 +22,11 @@ namespace CarSalesAPI.Controllers
                         GetSeries = new List<SeriesModel>()
                     };
 
-                    var seriesBrandData = context.SeriesBrand.Where(x => x.BrandID == input.BrandID);
+                    var seriesBrandData = await context.SeriesBrand.Where(x => x.BrandID == input.BrandID).ToListAsync();
 
                     foreach (var item in seriesBrandData)
                     {
-                        var data = context.Series.Where(x => x.ID == item.SeriesID && x.isDeleted == false);
+                        var data = await context.Series.Where(x => x.ID == item.SeriesID && x.isDeleted == false).ToListAsync();
 
                         foreach(var seriesItem in data)
                         {
@@ -60,7 +61,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Series/AddOrEditSeries")]
-        public GetLastAddedResponse AddOrEditSeries(AddOrEditSeriesRequest input)
+        public async Task<GetLastAddedResponse> AddOrEditSeries(AddOrEditSeriesRequest input)
         {
             try
             {
@@ -76,6 +77,7 @@ namespace CarSalesAPI.Controllers
                         };
 
                         var dataRes = context.Series.Add(data);
+                        await context.SaveChangesAsync();
 
                         SeriesBrand seriesBrandData = new SeriesBrand()
                         {
@@ -84,13 +86,13 @@ namespace CarSalesAPI.Controllers
                         };
 
                         context.SeriesBrand.Add(seriesBrandData);
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                         res.ID = dataRes.ID;
                         res.Name = dataRes.Name;
                     }
                     else
                     {
-                        var data = context.Series.Single(x => x.ID == input.ID);
+                        var data = await context.Series.SingleOrDefaultAsync(x => x.ID == input.ID);
                         if (input.isEdit)
                         {
                             data.Name = input.Name;
@@ -100,7 +102,7 @@ namespace CarSalesAPI.Controllers
                             data.isDeleted = true;
                         }
 
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
 
                     res.Success = true;

@@ -150,6 +150,7 @@
     <Compile Include="Controllers\SeriesController.cs" />
     <Compile Include="Controllers\TractionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Converters\ByteCompare.cs" />
     <Compile Include="Converters\Crypto.cs" />
     <Compile Include="Converters\RandomStringGenerator.cs" />
     <Compile Include="Fuel.cs">

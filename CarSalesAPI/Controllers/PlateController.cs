@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using CarSalesAPI.Models;
 
 namespace CarSalesAPI.Controllers
@@ -10,7 +11,7 @@ namespace CarSalesAPI.Controllers
     public class PlateController : ApiController
     {
         [HttpGet, Route("api/Plate/GetPlates")]
-        public GetPlatesResponse GetPlates()
+        public async Task<GetPlatesResponse> GetPlates()
         {
             try
             {
@@ -21,7 +22,7 @@ namespace CarSalesAPI.Controllers
                         GetPlates = new List<PlateModel>()
                     };
 
-                    var data = context.Plate.Where(x => x.isDeleted == false);
+                    var data = await context.Plate.Where(x => x.isDeleted == false).ToListAsync();
 
                     foreach (var item in data)
                     {
@@ -56,7 +57,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Plate/AddOrEditPlate")]
-        public GetLastAddedResponse AddOrEditPlate(AddOrEditRequest input)
+        public async Task<GetLastAddedResponse> AddOrEditPlate(AddOrEditRequest input)
         {
             try
             {
@@ -72,13 +73,13 @@ namespace CarSalesAPI.Controllers
                         };
 
                         var dataRes = context.Plate.Add(data);
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                         res.ID = dataRes.ID;
                         res.Name = dataRes.Name;
                     }
                     else
                     {
-                        var data = context.Plate.Single(x => x.ID == input.ID);
+                        var data = await context.Plate.SingleOrDefaultAsync(x => x.ID == input.ID);
 
                         if (input.isEdit)
                         {
@@ -89,7 +90,7 @@ namespace CarSalesAPI.Controllers
                             data.isDeleted = true;
                         }
 
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
 
                     res.Success = true;

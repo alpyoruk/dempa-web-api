@@ -36,9 +36,9 @@ namespace CarSalesAPI
         public virtual DbSet<SeriesBrand> SeriesBrand { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Traction> Traction { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Car> Car { get; set; }
         public virtual DbSet<CarDetails> CarDetails { get; set; }
         public virtual DbSet<CarDetailPhotos> CarDetailPhotos { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using CarSalesAPI.Models;
 
 namespace CarSalesAPI.Controllers
@@ -10,13 +11,13 @@ namespace CarSalesAPI.Controllers
     public class CarController : ApiController
     {
         [HttpGet, Route("api/Car/GetCars")]
-        public GetCarsResponse GetCars()
+        public async Task<GetCarsResponse> GetCars()
         {
             try
             {
                 using (var context = new CarSalesEntities())
                 {
-                    var data = context.Car.Where(x => x.isDeleted == false && x.isPayed == false && x.isSold == false && x.isRemoved == false);
+                    var data = await context.Car.Where(x => x.isDeleted == false && x.isPayed == false && x.isSold == false && x.isRemoved == false).ToListAsync();
 
                     GetCarsResponse res = new GetCarsResponse()
                     {
@@ -40,7 +41,7 @@ namespace CarSalesAPI.Controllers
                             Description = item.Description,
                         };
 
-                        var photoData = context.CarDetailPhotos.Where(x => x.CarID == item.ID && x.isMainPhoto == true);
+                        var photoData = await context.CarDetailPhotos.Where(x => x.CarID == item.ID && x.isMainPhoto == true).ToListAsync();
 
                         foreach (var photoItem in photoData)
                         {
@@ -50,17 +51,21 @@ namespace CarSalesAPI.Controllers
 
                         carReq.Car = carModel;
 
-                        var carDetailsData = context.CarDetails.SingleOrDefault(x => x.CarID == item.ID);
+                        var carDetailsData = await context.CarDetails.SingleOrDefaultAsync(x => x.CarID == item.ID);
+                        var brandN = await context.Brand.SingleOrDefaultAsync(x => x.ID == carDetailsData.BrandID);
+                        var gearN = await context.Gear.SingleOrDefaultAsync(x => x.ID == carDetailsData.GearID);
+                        var modelN = await context.Model.SingleOrDefaultAsync(x => x.ID == carDetailsData.ModelID);
+                        var seriesN = await context.Series.SingleOrDefaultAsync(x => x.ID == carDetailsData.SeriesID);
 
                         CarDetailsModel carDetailsModel = new CarDetailsModel()
                         {
                             Color = carDetailsData.Color,
                             Kilometer = carDetailsData.Kilometer,
                             Year = carDetailsData.Year,
-                            BrandName = context.Brand.SingleOrDefault(x => x.ID == carDetailsData.BrandID).Name,
-                            GearName = context.Gear.SingleOrDefault(x => x.ID == carDetailsData.GearID).Name,
-                            ModelName = context.Model.SingleOrDefault(x => x.ID == carDetailsData.ModelID).Name,
-                            SeriesName = context.Series.SingleOrDefault(x => x.ID == carDetailsData.SeriesID).Name,
+                            BrandName = brandN.Name,
+                            GearName = gearN.Name,
+                            ModelName = modelN.Name,
+                            SeriesName = seriesN.Name,
                         };
 
                         carReq.CarDetails = carDetailsModel;
@@ -88,7 +93,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpGet, Route("api/Car/GetOnSale")]
-        public GetCarsResponse GetOnSale()
+        public async Task<GetCarsResponse> GetOnSale()
         {
             try
             {
@@ -99,7 +104,7 @@ namespace CarSalesAPI.Controllers
                         GetCars = new List<GetCarRequest>()
                     };
 
-                    var data = context.Car.Where(x => x.isDeleted == false && x.isPayed == false && x.isSold == false && x.isRemoved == false);
+                    var data = await context.Car.Where(x => x.isDeleted == false && x.isPayed == false && x.isSold == false && x.isRemoved == false).ToListAsync();
 
                     foreach (var item in data)
                     {
@@ -118,7 +123,7 @@ namespace CarSalesAPI.Controllers
                             Description = item.Description,
                         };
 
-                        var photoData = context.CarDetailPhotos.Where(x => x.CarID == item.ID && x.isMainPhoto == true);
+                        var photoData = await context.CarDetailPhotos.Where(x => x.CarID == item.ID && x.isMainPhoto == true).ToListAsync();
 
                         foreach (var photoItem in photoData)
                         {
@@ -128,16 +133,19 @@ namespace CarSalesAPI.Controllers
 
                         carReq.Car = carModel;
 
-                        var carDetailsData = context.CarDetails.SingleOrDefault(x => x.CarID == item.ID);
+                        var carDetailsData = await context.CarDetails.SingleOrDefaultAsync(x => x.CarID == item.ID);
+                        var brandN = await context.Brand.SingleOrDefaultAsync(x => x.ID == carDetailsData.BrandID);
+                        var modelN = await context.Model.SingleOrDefaultAsync(x => x.ID == carDetailsData.ModelID);
+                        var seriesN = await context.Series.SingleOrDefaultAsync(x => x.ID == carDetailsData.SeriesID);
 
                         CarDetailsModel carDetailsModel = new CarDetailsModel()
                         {
                             Color = carDetailsData.Color,
                             Kilometer = carDetailsData.Kilometer,
                             Year = carDetailsData.Year,
-                            BrandName = context.Brand.SingleOrDefault(x => x.ID == carDetailsData.BrandID).Name,
-                            ModelName = context.Model.SingleOrDefault(x => x.ID == carDetailsData.ModelID).Name,
-                            SeriesName = context.Series.SingleOrDefault(x => x.ID == carDetailsData.SeriesID).Name,
+                            BrandName = brandN.Name,
+                            ModelName = modelN.Name,
+                            SeriesName = seriesN.Name,
                         };
 
                         carReq.CarDetails = carDetailsModel;
@@ -165,13 +173,13 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Car/GetOnSold")]
-        public GetSoldCarsResponse GetOnSold(SoldCarsRequest input)
+        public async Task<GetSoldCarsResponse> GetOnSold(SoldCarsRequest input)
         {
             try
             {
                 using (var context = new CarSalesEntities())
                 {
-                    var data = context.Car.Where(x => x.isSold == true && x.isRemoved == false);
+                    var data = await context.Car.Where(x => x.isSold == true && x.isRemoved == false).ToListAsync();
 
                     double itemCount = data.ToList().Count;
                     double dpageCount = itemCount / 10;
@@ -208,7 +216,7 @@ namespace CarSalesAPI.Controllers
                             BoughtPrice = item.BoughtPrice
                         };
 
-                        var photoData = context.CarDetailPhotos.Where(x => x.CarID == item.ID && x.isMainPhoto == true);
+                        var photoData = await context.CarDetailPhotos.Where(x => x.CarID == item.ID && x.isMainPhoto == true).ToListAsync();
 
                         foreach (var photoItem in photoData)
                         {
@@ -218,15 +226,18 @@ namespace CarSalesAPI.Controllers
 
                         carReq.Car = carModel;
 
-                        var carDetailsData = context.CarDetails.SingleOrDefault(x => x.CarID == item.ID);
+                        var carDetailsData = await context.CarDetails.SingleOrDefaultAsync(x => x.CarID == item.ID);
+                        var brandN = await context.Brand.SingleOrDefaultAsync(x => x.ID == carDetailsData.BrandID);
+                        var modelN = await context.Model.SingleOrDefaultAsync(x => x.ID == carDetailsData.ModelID);
+                        var seriesN = await context.Series.SingleOrDefaultAsync(x => x.ID == carDetailsData.SeriesID);
 
                         CarDetailsModel carDetailsModel = new CarDetailsModel()
                         {
                             Kilometer = carDetailsData.Kilometer,
                             Year = carDetailsData.Year,
-                            BrandName = context.Brand.SingleOrDefault(x => x.ID == carDetailsData.BrandID).Name,
-                            ModelName = context.Model.SingleOrDefault(x => x.ID == carDetailsData.ModelID).Name,
-                            SeriesName = context.Series.SingleOrDefault(x => x.ID == carDetailsData.SeriesID).Name,
+                            BrandName = brandN.Name,
+                            ModelName = modelN.Name,
+                            SeriesName = seriesN.Name,
                         };
 
                         carReq.CarDetails = carDetailsModel;
@@ -254,7 +265,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpGet, Route("api/Car/GetOnPaid")]
-        public GetCarsResponse GetOnPaid()
+        public async Task<GetCarsResponse> GetOnPaid()
         {
             try
             {
@@ -265,7 +276,7 @@ namespace CarSalesAPI.Controllers
                         GetCars = new List<GetCarRequest>()
                     };
 
-                    var data = context.Car.Where(x => x.isPayed == true && x.isSold == false && x.isRemoved == false);
+                    var data = await context.Car.Where(x => x.isPayed == true && x.isSold == false && x.isRemoved == false).ToListAsync();
 
                     foreach (var item in data)
                     {
@@ -285,7 +296,7 @@ namespace CarSalesAPI.Controllers
                             Description = item.Description,
                         };
 
-                        var photoData = context.CarDetailPhotos.Where(x => x.CarID == item.ID && x.isMainPhoto == true);
+                        var photoData = await context.CarDetailPhotos.Where(x => x.CarID == item.ID && x.isMainPhoto == true).ToListAsync();
 
                         foreach (var photoItem in photoData)
                         {
@@ -295,16 +306,19 @@ namespace CarSalesAPI.Controllers
 
                         carReq.Car = carModel;
 
-                        var carDetailsData = context.CarDetails.SingleOrDefault(x => x.CarID == item.ID);
+                        var carDetailsData = await context.CarDetails.SingleOrDefaultAsync(x => x.CarID == item.ID);
+                        var brandN = await context.Brand.SingleOrDefaultAsync(x => x.ID == carDetailsData.BrandID);
+                        var modelN = await context.Model.SingleOrDefaultAsync(x => x.ID == carDetailsData.ModelID);
+                        var seriesN = await context.Series.SingleOrDefaultAsync(x => x.ID == carDetailsData.SeriesID);
 
                         CarDetailsModel carDetailsModel = new CarDetailsModel()
                         {
                             Color = carDetailsData.Color,
                             Kilometer = carDetailsData.Kilometer,
                             Year = carDetailsData.Year,
-                            BrandName = context.Brand.SingleOrDefault(x => x.ID == carDetailsData.BrandID).Name,
-                            ModelName = context.Model.SingleOrDefault(x => x.ID == carDetailsData.ModelID).Name,
-                            SeriesName = context.Series.SingleOrDefault(x => x.ID == carDetailsData.SeriesID).Name,
+                            BrandName = brandN.Name,
+                            ModelName = modelN.Name,
+                            SeriesName = seriesN.Name,
                         };
 
                         carReq.CarDetails = carDetailsModel;
@@ -332,7 +346,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpGet, Route("api/Car/GetOnNotSale")]
-        public GetCarsResponse GetOnNotSale()
+        public async Task<GetCarsResponse> GetOnNotSale()
         {
             try
             {
@@ -343,7 +357,7 @@ namespace CarSalesAPI.Controllers
                         GetCars = new List<GetCarRequest>()
                     };
 
-                    var data = context.Car.Where(x => x.isDeleted == true && x.isPayed == false && x.isSold == false && x.isRemoved == false);
+                    var data = await context.Car.Where(x => x.isDeleted == true && x.isPayed == false && x.isSold == false && x.isRemoved == false).ToListAsync();
 
                     foreach (var item in data)
                     {
@@ -362,7 +376,7 @@ namespace CarSalesAPI.Controllers
                             Title = item.Title,
                         };
 
-                        var photoData = context.CarDetailPhotos.Where(x => x.CarID == item.ID && x.isMainPhoto == true);
+                        var photoData = await context.CarDetailPhotos.Where(x => x.CarID == item.ID && x.isMainPhoto == true).ToListAsync();
 
                         foreach (var photoItem in photoData)
                         {
@@ -372,16 +386,19 @@ namespace CarSalesAPI.Controllers
 
                         carReq.Car = carModel;
 
-                        var carDetailsData = context.CarDetails.SingleOrDefault(x => x.CarID == item.ID);
+                        var carDetailsData = await context.CarDetails.SingleOrDefaultAsync(x => x.CarID == item.ID);
+                        var brandN = await context.Brand.SingleOrDefaultAsync(x => x.ID == carDetailsData.BrandID);
+                        var modelN = await context.Model.SingleOrDefaultAsync(x => x.ID == carDetailsData.ModelID);
+                        var seriesN = await context.Series.SingleOrDefaultAsync(x => x.ID == carDetailsData.SeriesID);
 
                         CarDetailsModel carDetailsModel = new CarDetailsModel()
                         {
                             Color = carDetailsData.Color,
                             Kilometer = carDetailsData.Kilometer,
                             Year = carDetailsData.Year,
-                            BrandName = context.Brand.SingleOrDefault(x => x.ID == carDetailsData.BrandID).Name,
-                            ModelName = context.Model.SingleOrDefault(x => x.ID == carDetailsData.ModelID).Name,
-                            SeriesName = context.Series.SingleOrDefault(x => x.ID == carDetailsData.SeriesID).Name,
+                            BrandName = brandN.Name,
+                            ModelName = modelN.Name,
+                            SeriesName = seriesN.Name,
                         };
 
                         carReq.CarDetails = carDetailsModel;
@@ -409,7 +426,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Car/GetCarForAdmin")]
-        public GetCarResponse GetCarForAdmin(CarModel input)
+        public async Task<GetCarResponse> GetCarForAdmin(CarModel input)
         {
             try
             {
@@ -422,7 +439,9 @@ namespace CarSalesAPI.Controllers
                         CarPhotos = new List<CarDetailPhotosModel>()
                     };
 
-                    var carData = context.Car.SingleOrDefault(x => x.ID == input.ID);
+                    var carData = await context.Car.SingleOrDefaultAsync(x => x.ID == input.ID);
+
+                    var user = await context.Users.SingleOrDefaultAsync(x => x.ID == carData.UserID);
 
                     CarModel carModel = new CarModel()
                     {
@@ -431,7 +450,7 @@ namespace CarSalesAPI.Controllers
                         Description = carData.Description,
                         PublishDate = carData.PublishDate,
                         Title = carData.Title,
-                        UserFullName = context.Users.SingleOrDefault(x => x.ID == carData.UserID).Name + " " + context.Users.SingleOrDefault(x => x.ID == carData.UserID).Surname,
+                        UserFullName = user.Name + " " + user.Surname,
                         BoughtDate = carData.BoughtDate,
                         BoughtPrice = carData.BoughtPrice,
                         isPayed = carData.isPayed,
@@ -451,7 +470,7 @@ namespace CarSalesAPI.Controllers
 
                     res.Car = carModel;
 
-                    var photoData = context.CarDetailPhotos.Where(x => x.CarID == input.ID);
+                    var photoData = await context.CarDetailPhotos.Where(x => x.CarID == input.ID).ToListAsync();
 
                     foreach (var photoItem in photoData)
                     {
@@ -467,7 +486,16 @@ namespace CarSalesAPI.Controllers
                         res.CarPhotos.Add(carDetailPhotosModel);
                     }
 
-                    var carDetailsData = context.CarDetails.SingleOrDefault(x => x.CarID == input.ID);
+                    var carDetailsData = await context.CarDetails.SingleOrDefaultAsync(x => x.CarID == input.ID);
+
+                    var brandN = await context.Brand.SingleOrDefaultAsync(x => x.ID == carDetailsData.BrandID);
+                    var caseN = await context.Case.SingleOrDefaultAsync(x => x.ID == carDetailsData.CaseID);
+                    var fuelN = await context.Fuel.SingleOrDefaultAsync(x => x.ID == carDetailsData.FuelID);
+                    var gearN = await context.Gear.SingleOrDefaultAsync(x => x.ID == carDetailsData.GearID);
+                    var modelN = await context.Model.SingleOrDefaultAsync(x => x.ID == carDetailsData.ModelID);
+                    var plateN = await context.Plate.SingleOrDefaultAsync(x => x.ID == carDetailsData.PlateID);
+                    var seriesN = await context.Series.SingleOrDefaultAsync(x => x.ID == carDetailsData.SeriesID);
+                    var tractionN = await context.Traction.SingleOrDefaultAsync(x => x.ID == carDetailsData.TractionID);
 
                     CarDetailsModel carDetailsModel = new CarDetailsModel()
                     {
@@ -478,21 +506,21 @@ namespace CarSalesAPI.Controllers
                         Power = carDetailsData.Power,
                         Year = carDetailsData.Year,
                         BrandID = carDetailsData.BrandID,
-                        BrandName = context.Brand.SingleOrDefault(x => x.ID == carDetailsData.BrandID).Name,
+                        BrandName = brandN.Name,
                         CaseID = carDetailsData.CaseID,
-                        CaseName = context.Case.SingleOrDefault(x => x.ID == carDetailsData.CaseID).Name,
+                        CaseName = caseN.Name,
                         FuelID = carDetailsData.FuelID,
-                        FuelName = context.Fuel.SingleOrDefault(x => x.ID == carDetailsData.FuelID).Name,
+                        FuelName = fuelN.Name,
                         GearID = carDetailsData.GearID,
-                        GearName = context.Gear.SingleOrDefault(x => x.ID == carDetailsData.GearID).Name,
+                        GearName = gearN.Name,
                         ModelID = carDetailsData.ModelID,
-                        ModelName = context.Model.SingleOrDefault(x => x.ID == carDetailsData.ModelID).Name,
+                        ModelName = modelN.Name,
                         PlateID = carDetailsData.PlateID,
-                        PlateName = context.Plate.SingleOrDefault(x => x.ID == carDetailsData.PlateID).Name,
+                        PlateName = plateN.Name,
                         SeriesID = carDetailsData.SeriesID,
-                        SeriesName = context.Series.SingleOrDefault(x => x.ID == carDetailsData.SeriesID).Name,
+                        SeriesName = seriesN.Name,
                         TractionID = carDetailsData.TractionID,
-                        TractionName = context.Traction.SingleOrDefault(x => x.ID == carDetailsData.TractionID).Name,
+                        TractionName = tractionN.Name,
                     };
 
                     res.CarDetails = carDetailsModel;
@@ -517,7 +545,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Car/GetCarForSold")]
-        public GetCarResponse GetCarForASold(CarModel input)
+        public async Task<GetCarResponse> GetCarForASold(CarModel input)
         {
             try
             {
@@ -530,7 +558,8 @@ namespace CarSalesAPI.Controllers
                         CarPhotos = new List<CarDetailPhotosModel>()
                     };
 
-                    var carData = context.Car.SingleOrDefault(x => x.ID == input.ID);
+                    var carData = await context.Car.SingleOrDefaultAsync(x => x.ID == input.ID);
+                    var user = await context.Users.SingleOrDefaultAsync(x => x.ID == carData.UserID);
 
                     CarModel carModel = new CarModel()
                     {
@@ -539,7 +568,7 @@ namespace CarSalesAPI.Controllers
                         Description = carData.Description,
                         PublishDate = carData.PublishDate,
                         Title = carData.Title,
-                        UserFullName = context.Users.SingleOrDefault(x => x.ID == carData.UserID).Name + " " + context.Users.SingleOrDefault(x => x.ID == carData.UserID).Surname,
+                        UserFullName = user.Name + " " + user.Surname,
                         BoughtDate = carData.BoughtDate,
                         BoughtPrice = carData.BoughtPrice,
                         isPayed = carData.isPayed,
@@ -561,7 +590,7 @@ namespace CarSalesAPI.Controllers
 
                     res.Car = carModel;
 
-                    var photoData = context.CarDetailPhotos.Where(x => x.CarID == input.ID);
+                    var photoData = await context.CarDetailPhotos.Where(x => x.CarID == input.ID).ToListAsync();
 
                     foreach (var photoItem in photoData)
                     {
@@ -577,7 +606,15 @@ namespace CarSalesAPI.Controllers
                         res.CarPhotos.Add(carDetailPhotosModel);
                     }
 
-                    var carDetailsData = context.CarDetails.SingleOrDefault(x => x.CarID == input.ID);
+                    var carDetailsData = await context.CarDetails.SingleOrDefaultAsync(x => x.CarID == input.ID);
+                    var brandN = await context.Brand.SingleOrDefaultAsync(x => x.ID == carDetailsData.BrandID);
+                    var caseN = await context.Case.SingleOrDefaultAsync(x => x.ID == carDetailsData.CaseID);
+                    var fuelN = await context.Fuel.SingleOrDefaultAsync(x => x.ID == carDetailsData.FuelID);
+                    var gearN = await context.Gear.SingleOrDefaultAsync(x => x.ID == carDetailsData.GearID);
+                    var modelN = await context.Model.SingleOrDefaultAsync(x => x.ID == carDetailsData.ModelID);
+                    var plateN = await context.Plate.SingleOrDefaultAsync(x => x.ID == carDetailsData.PlateID);
+                    var seriesN = await context.Series.SingleOrDefaultAsync(x => x.ID == carDetailsData.SeriesID);
+                    var tractionN = await context.Traction.SingleOrDefaultAsync(x => x.ID == carDetailsData.TractionID);
 
                     CarDetailsModel carDetailsModel = new CarDetailsModel()
                     {
@@ -588,21 +625,21 @@ namespace CarSalesAPI.Controllers
                         Power = carDetailsData.Power,
                         Year = carDetailsData.Year,
                         BrandID = carDetailsData.BrandID,
-                        BrandName = context.Brand.SingleOrDefault(x => x.ID == carDetailsData.BrandID).Name,
+                        BrandName = brandN.Name,
                         CaseID = carDetailsData.CaseID,
-                        CaseName = context.Case.SingleOrDefault(x => x.ID == carDetailsData.CaseID).Name,
+                        CaseName = caseN.Name,
                         FuelID = carDetailsData.FuelID,
-                        FuelName = context.Fuel.SingleOrDefault(x => x.ID == carDetailsData.FuelID).Name,
+                        FuelName = fuelN.Name,
                         GearID = carDetailsData.GearID,
-                        GearName = context.Gear.SingleOrDefault(x => x.ID == carDetailsData.GearID).Name,
+                        GearName = gearN.Name,
                         ModelID = carDetailsData.ModelID,
-                        ModelName = context.Model.SingleOrDefault(x => x.ID == carDetailsData.ModelID).Name,
+                        ModelName = modelN.Name,
                         PlateID = carDetailsData.PlateID,
-                        PlateName = context.Plate.SingleOrDefault(x => x.ID == carDetailsData.PlateID).Name,
+                        PlateName = plateN.Name,
                         SeriesID = carDetailsData.SeriesID,
-                        SeriesName = context.Series.SingleOrDefault(x => x.ID == carDetailsData.SeriesID).Name,
+                        SeriesName = seriesN.Name,
                         TractionID = carDetailsData.TractionID,
-                        TractionName = context.Traction.SingleOrDefault(x => x.ID == carDetailsData.TractionID).Name,
+                        TractionName = tractionN.Name,
                     };
 
                     res.CarDetails = carDetailsModel;
@@ -627,7 +664,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpGet, Route("api/Car/GetCar")]
-        public GetCarResponse GetCar(CarModel input)
+        public async Task<GetCarResponse> GetCar(CarModel input)
         {
             try
             {
@@ -640,7 +677,7 @@ namespace CarSalesAPI.Controllers
                         CarPhotos = new List<CarDetailPhotosModel>()
                     };
 
-                    var carData = context.Car.SingleOrDefault(x => x.ID == input.ID);
+                    var carData = await context.Car.SingleOrDefaultAsync(x => x.ID == input.ID);
 
                     CarModel carModel = new CarModel()
                     {
@@ -652,7 +689,7 @@ namespace CarSalesAPI.Controllers
 
                     res.Car = carModel;
 
-                    var photoData = context.CarDetailPhotos.Where(x => x.CarID == input.ID);
+                    var photoData = await context.CarDetailPhotos.Where(x => x.CarID == input.ID).ToListAsync();
 
                     foreach (var photoItem in photoData)
                     {
@@ -665,7 +702,15 @@ namespace CarSalesAPI.Controllers
                         res.CarPhotos.Add(carDetailPhotosModel);
                     }
 
-                    var carDetailsData = context.CarDetails.SingleOrDefault(x => x.CarID == input.ID);
+                    var carDetailsData = await context.CarDetails.SingleOrDefaultAsync(x => x.CarID == input.ID);
+                    var brandN = await context.Brand.SingleOrDefaultAsync(x => x.ID == carDetailsData.BrandID);
+                    var caseN = await context.Case.SingleOrDefaultAsync(x => x.ID == carDetailsData.CaseID);
+                    var fuelN = await context.Fuel.SingleOrDefaultAsync(x => x.ID == carDetailsData.FuelID);
+                    var gearN = await context.Gear.SingleOrDefaultAsync(x => x.ID == carDetailsData.GearID);
+                    var modelN = await context.Model.SingleOrDefaultAsync(x => x.ID == carDetailsData.ModelID);
+                    var plateN = await context.Plate.SingleOrDefaultAsync(x => x.ID == carDetailsData.PlateID);
+                    var seriesN = await context.Series.SingleOrDefaultAsync(x => x.ID == carDetailsData.SeriesID);
+                    var traction = await context.Traction.SingleOrDefaultAsync(x => x.ID == carDetailsData.TractionID);
 
                     CarDetailsModel carDetailsModel = new CarDetailsModel()
                     {
@@ -674,14 +719,14 @@ namespace CarSalesAPI.Controllers
                         Kilometer = carDetailsData.Kilometer,
                         Power = carDetailsData.Power,
                         Year = carDetailsData.Year,
-                        BrandName = context.Brand.SingleOrDefault(x => x.ID == carDetailsData.BrandID).Name,
-                        CaseName = context.Case.SingleOrDefault(x => x.ID == carDetailsData.CaseID).Name,
-                        FuelName = context.Fuel.SingleOrDefault(x => x.ID == carDetailsData.FuelID).Name,
-                        GearName = context.Gear.SingleOrDefault(x => x.ID == carDetailsData.GearID).Name,
-                        ModelName = context.Model.SingleOrDefault(x => x.ID == carDetailsData.ModelID).Name,
-                        PlateName = context.Plate.SingleOrDefault(x => x.ID == carDetailsData.PlateID).Name,
-                        SeriesName = context.Series.SingleOrDefault(x => x.ID == carDetailsData.SeriesID).Name,
-                        TractionName = context.Traction.SingleOrDefault(x => x.ID == carDetailsData.TractionID).Name
+                        BrandName = brandN.Name,
+                        CaseName = caseN.Name,
+                        FuelName = fuelN.Name,
+                        GearName = gearN.Name,
+                        ModelName = modelN.Name,
+                        PlateName = plateN.Name,
+                        SeriesName = seriesN.Name,
+                        TractionName = traction.Name
                     };
 
                     res.CarDetails = carDetailsModel;
@@ -706,7 +751,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Car/AddCar")]
-        public BaseApiResponse AddCar(AddCarRequest input)
+        public async Task<BaseApiResponse> AddCar(AddCarRequest input)
         {
             try
             {
@@ -724,7 +769,7 @@ namespace CarSalesAPI.Controllers
                     };
 
                     var dataRes = context.Car.Add(carData);
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                     int lastAddedCarID = dataRes.ID;
 
                     CarDetails carDetailsData = new CarDetails()
@@ -763,7 +808,7 @@ namespace CarSalesAPI.Controllers
                         }
                     }
 
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
 
                     BaseApiResponse res = new BaseApiResponse()
                     {
@@ -789,7 +834,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Car/EditCar")]
-        public GetDetailsResponse EditCar(EditCarRequest input)
+        public async Task<GetDetailsResponse> EditCar(EditCarRequest input)
         {
             try
             {
@@ -800,7 +845,7 @@ namespace CarSalesAPI.Controllers
                         GetDetails = new GetDetailsRequest()
                     };
 
-                    var carData = context.Car.SingleOrDefault(x => x.ID == input.Car.ID);
+                    var carData = await context.Car.SingleOrDefaultAsync(x => x.ID == input.Car.ID);
 
                     carData.Title = input.Car.Title;
                     carData.Description = input.Car.Description;
@@ -808,9 +853,9 @@ namespace CarSalesAPI.Controllers
                     carData.BoughtDate = input.Car.BoughtDate;
                     carData.BoughtPrice = input.Car.BoughtPrice;
 
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
 
-                    var carDetailsData = context.CarDetails.SingleOrDefault(x => x.CarID == input.Car.ID);
+                    var carDetailsData = await context.CarDetails.SingleOrDefaultAsync(x => x.CarID == input.Car.ID);
 
                     carDetailsData.BrandID = input.CarDetails.BrandID;
                     carDetailsData.CaseID = input.CarDetails.CaseID;
@@ -826,16 +871,25 @@ namespace CarSalesAPI.Controllers
                     carDetailsData.Power = input.CarDetails.Power;
                     carDetailsData.Year = input.CarDetails.Year;
 
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
 
-                    res.GetDetails.BrandName = context.Brand.SingleOrDefault(x => x.ID == input.CarDetails.BrandID).Name;
-                    res.GetDetails.SeriesName = context.Series.SingleOrDefault(x => x.ID == input.CarDetails.SeriesID).Name;
-                    res.GetDetails.ModelName = context.Model.SingleOrDefault(x => x.ID == input.CarDetails.ModelID).Name;
-                    res.GetDetails.CaseName = context.Case.SingleOrDefault(x => x.ID == input.CarDetails.CaseID).Name;
-                    res.GetDetails.FuelName = context.Fuel.SingleOrDefault(x => x.ID == input.CarDetails.FuelID).Name;
-                    res.GetDetails.GearName = context.Gear.SingleOrDefault(x => x.ID == input.CarDetails.GearID).Name;
-                    res.GetDetails.PlateName = context.Plate.SingleOrDefault(x => x.ID == input.CarDetails.PlateID).Name;
-                    res.GetDetails.TractionName = context.Traction.SingleOrDefault(x => x.ID == input.CarDetails.TractionID).Name;
+                    var brandN = await context.Brand.SingleOrDefaultAsync(x => x.ID == input.CarDetails.BrandID);
+                    var seriesN = await context.Series.SingleOrDefaultAsync(x => x.ID == input.CarDetails.SeriesID);
+                    var modelN = await context.Model.SingleOrDefaultAsync(x => x.ID == input.CarDetails.ModelID);
+                    var caseN = await context.Case.SingleOrDefaultAsync(x => x.ID == input.CarDetails.CaseID);
+                    var fuelN = await context.Fuel.SingleOrDefaultAsync(x => x.ID == input.CarDetails.FuelID);
+                    var gearN = await context.Gear.SingleOrDefaultAsync(x => x.ID == input.CarDetails.GearID);
+                    var plateN = await context.Plate.SingleOrDefaultAsync(x => x.ID == input.CarDetails.PlateID);
+                    var tractionN = await context.Traction.SingleOrDefaultAsync(x => x.ID == input.CarDetails.TractionID);
+
+                    res.GetDetails.BrandName = brandN.Name;
+                    res.GetDetails.SeriesName = seriesN.Name;
+                    res.GetDetails.ModelName = modelN.Name;
+                    res.GetDetails.CaseName = caseN.Name;
+                    res.GetDetails.FuelName = fuelN.Name;
+                    res.GetDetails.GearName = gearN.Name;
+                    res.GetDetails.PlateName = plateN.Name;
+                    res.GetDetails.TractionName = tractionN.Name;
 
                     res.Success = true;
                     res.Status = 1;
@@ -857,23 +911,23 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Car/EditCarLabels")]
-        public BaseApiResponse EditCarLabels(EditCarLabelsRequest input)
+        public async Task<BaseApiResponse> EditCarLabels(EditCarLabelsRequest input)
         {
             try
             {
                 using (var context = new CarSalesEntities())
                 {
-                    var carData = context.Car.Single(x => x.ID == input.CarID);
+                    var carData = await context.Car.SingleOrDefaultAsync(x => x.ID == input.CarID);
                     if (input.isTitle)
                     {
                         carData.Title = input.Title;
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
 
                     if (input.isDesc)
                     {
                         carData.Description = input.Desc;
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
 
                     BaseApiResponse res = new BaseApiResponse()
@@ -900,18 +954,18 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Car/ChangeCarStatus")]
-        public BaseApiResponse ChangeCarStatus(ChangeCarStatusRequest input)
+        public async Task<BaseApiResponse> ChangeCarStatus(ChangeCarStatusRequest input)
         {
             try
             {
                 using (var context = new CarSalesEntities())
                 {
-                    var data = context.Car.SingleOrDefault(x => x.ID == input.CarID);
+                    var data = await context.Car.SingleOrDefaultAsync(x => x.ID == input.CarID);
 
                     if (input.checkIsDeleted)
                     {
                         data.isDeleted = input.Status;
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
                     else if (input.checkIsPayed)
                     {
@@ -924,7 +978,7 @@ namespace CarSalesAPI.Controllers
                         {
                             data.PayedNumber = null;
                         }
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
                     else if (input.checkIsSold)
                     {
@@ -943,12 +997,12 @@ namespace CarSalesAPI.Controllers
                             data.SoldDate = null;
                             data.isDeleted = true;
                         }
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
                     else if (input.checkIsRemoved)
                     {
                         data.isRemoved = true;
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
 
                     BaseApiResponse res = new BaseApiResponse()
@@ -975,7 +1029,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Car/EditPhoto")]
-        public BaseApiResponse EditPhoto(EditPhotoRequest input)
+        public async Task<BaseApiResponse> EditPhoto(EditPhotoRequest input)
         {
             try
             {
@@ -995,16 +1049,16 @@ namespace CarSalesAPI.Controllers
                             };
 
                             context.CarDetailPhotos.Add(model);
-                            context.SaveChanges();
+                            await context.SaveChangesAsync();
                         }
                     }
                     if (input.isDelete)
                     {
                         foreach (var item in input.DeletePhotos)
                         {
-                            var deleteData = context.CarDetailPhotos.SingleOrDefault(x => x.ID == item.ID);
+                            var deleteData = await context.CarDetailPhotos.SingleOrDefaultAsync(x => x.ID == item.ID);
                             context.CarDetailPhotos.Remove(deleteData);
-                            context.SaveChanges();
+                            await context.SaveChangesAsync();
                         }
                     }
 
@@ -1032,19 +1086,19 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/Car/EditPhotoMain")]
-        public BaseApiResponse EditPhotoMain(EditPhotoMainRequest input)
+        public async Task<BaseApiResponse> EditPhotoMain(EditPhotoMainRequest input)
         {
             try
             {
                 using (var context = new CarSalesEntities())
                 {
-                    var mainData = context.CarDetailPhotos.SingleOrDefault(x => x.CarID == input.CarID && x.isMainPhoto == true);
+                    var mainData = await context.CarDetailPhotos.SingleOrDefaultAsync(x => x.CarID == input.CarID && x.isMainPhoto == true);
                     mainData.isMainPhoto = false;
                     context.SaveChanges();
 
-                    var data = context.CarDetailPhotos.SingleOrDefault(x => x.PhotoLink == input.PhotoLink);
+                    var data = await context.CarDetailPhotos.SingleOrDefaultAsync(x => x.PhotoLink == input.PhotoLink);
                     data.isMainPhoto = true;
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
 
                     BaseApiResponse res = new BaseApiResponse()
                     {

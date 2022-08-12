@@ -6,14 +6,15 @@ using CarSalesAPI.Models;
 using CarSalesAPI.Converters;
 using System.Net.Mail;
 using System.Net;
-using System.Web.Http.Cors;
+using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace CarSalesAPI.Controllers
 {
     public class UserController : ApiController
     {
         [HttpPost, Route("api/User/Login")]
-        public GetUserResponse Login(UserModel input)
+        public async Task<GetUserResponse> Login(UserModel input)
         {
             try
             {
@@ -24,7 +25,7 @@ namespace CarSalesAPI.Controllers
                         GetUser = new UserModel()
                     };
 
-                    var data = context.Users.SingleOrDefault(x => x.Mail == input.Mail && x.isDeleted == false);
+                    var data = await context.Users.SingleOrDefaultAsync(x => x.Mail == input.Mail && x.isDeleted == false);
 
                     if (data == null)
                     {
@@ -34,9 +35,9 @@ namespace CarSalesAPI.Controllers
                     }
                     else
                     {
-                        string Password = Crypto.Decrypt(data.Password);
+                        byte[] Password = Crypto.Encrypt(input.StringPassword);
 
-                        if (Password != input.Password)
+                        if (!ByteCompare.ByteArrayCompare(Password, data.Password))
                         {
                             res.Success = true;
                             res.Status = 1;
@@ -77,19 +78,19 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/User/UpdateUser")]
-        public BaseApiResponse UpdateUser(UserModel input)
+        public async Task<BaseApiResponse> UpdateUser(UserModel input)
         {
             try
             {
                 using (var context = new CarSalesEntities())
                 {
-                    var userData = context.Users.SingleOrDefault(x => x.ID == input.ID);
+                    var userData = await context.Users.SingleOrDefaultAsync(x => x.ID == input.ID);
 
                     userData.Name = input.Name;
                     userData.Surname = input.Surname;
                     userData.Mail = input.Mail;
 
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
 
                     BaseApiResponse res = new BaseApiResponse()
                     {
@@ -115,15 +116,15 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/User/UpdatePassword")]
-        public BaseApiResponse UpdatePassword(UpdatePasswordRequest input)
+        public async Task<BaseApiResponse> UpdatePassword(UpdatePasswordRequest input)
         {
             try
             {
                 using (var context = new CarSalesEntities())
                 {
-                    var passData = context.Users.SingleOrDefault(x => x.ID == input.ID);
+                    var passData = await context.Users.SingleOrDefaultAsync(x => x.ID == input.ID);
 
-                    string Password = Crypto.Decrypt(passData.Password);
+                    byte[] Password = Crypto.Encrypt(input.oldPassword);
 
                     BaseApiResponse res = new BaseApiResponse()
                     {
@@ -131,7 +132,7 @@ namespace CarSalesAPI.Controllers
                         Status = 1,
                     };
 
-                    if (Password != input.oldPassword)
+                    if (!ByteCompare.ByteArrayCompare(Password, passData.Password))
                     {
                         res.StatusMessage = "Hatalı Eski Şifre!";
                     }
@@ -160,13 +161,13 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/User/ForgotPassword")]
-        public BaseApiResponse ForgotPassword(UserModel input)
+        public async Task<BaseApiResponse> ForgotPassword(UserModel input)
         {
             try
             {
                 using (var context = new CarSalesEntities())
                 {
-                    var data = context.Users.SingleOrDefault(x => x.Mail == input.Mail && x.isDeleted == false);
+                    var data = await context.Users.SingleOrDefaultAsync(x => x.Mail == input.Mail && x.isDeleted == false);
 
                     BaseApiResponse res = new BaseApiResponse()
                     {
@@ -206,7 +207,7 @@ namespace CarSalesAPI.Controllers
                         };
 
                         data.Password = Crypto.Encrypt(newPass);
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
 
                         res.StatusMessage = "OK";
                     }
@@ -228,13 +229,13 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/User/GetUser")]
-        public GetUserResponse GetUser(UserModel input)
+        public async Task<GetUserResponse> GetUser(UserModel input)
         {
             try
             {
                 using (var context = new CarSalesEntities())
                 {
-                    var data = context.Users.Single(x => x.ID == input.ID);
+                    var data = await context.Users.SingleOrDefaultAsync(x => x.ID == input.ID);
 
                     UserModel model = new UserModel()
                     {
@@ -242,7 +243,6 @@ namespace CarSalesAPI.Controllers
                         Mail = data.Mail,
                         Name = data.Name,
                         Surname = data.Surname,
-                        Password = data.Password,
                         FullName = data.Name + " " + data.Surname
                     };
 
@@ -271,7 +271,7 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpGet, Route("api/User/GetUsers")]
-        public GetUsersResponse GetUsers()
+        public async Task<GetUsersResponse> GetUsers()
         {
             try
             {
@@ -282,7 +282,7 @@ namespace CarSalesAPI.Controllers
                         GetUsers = new List<UserModel>()
                     };
 
-                    var data = context.Users.Where(x => x.isDeleted == false);
+                    var data = await context.Users.Where(x => x.isDeleted == false).ToListAsync();
 
                     foreach (var item in data)
                     {
@@ -292,7 +292,6 @@ namespace CarSalesAPI.Controllers
                             Name = item.Name,
                             Surname = item.Surname,
                             Mail = item.Mail,
-                            Password = item.Password,
                             FullName = item.Name + " " + item.Surname
                         };
 
@@ -319,12 +318,14 @@ namespace CarSalesAPI.Controllers
         }
 
         [HttpPost, Route("api/User/AddOrEditUser")]
-        public BaseApiResponse AddOrEditUser(AddOrEditUserRequest input)
+        public async Task<BaseApiResponse> AddOrEditUser(AddOrEditUserRequest input)
         {
             try
             {
                 using (var context = new CarSalesEntities())
                 {
+                    byte[] Password = Crypto.Encrypt(input.Password);
+
                     if (input.isAdd)
                     {
                         Users data = new Users()
@@ -332,19 +333,19 @@ namespace CarSalesAPI.Controllers
                             Name = input.Name,
                             Surname = input.Surname,
                             Mail = input.Mail,
-                            Password = input.Password
+                            Password = Password
                         };
                     }
                     else
                     {
-                        var data = context.Users.Single(x => x.ID == input.ID);
+                        var data = await context.Users.SingleOrDefaultAsync(x => x.ID == input.ID);
 
                         if (input.isEdit)
                         {
                             data.Name = input.Name;
                             data.Surname = input.Surname;
                             data.Mail = input.Mail;
-                            data.Password = input.Password;
+                            data.Password = Password;
                         }
                         else if (input.isDelete)
                         {
@@ -352,7 +353,7 @@ namespace CarSalesAPI.Controllers
                         }
                     }
 
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
 
                     BaseApiResponse res = new BaseApiResponse()
                     {
